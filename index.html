@@ -5388,6 +5388,602 @@ async function doSignup(){
 </script>
 
 <!-- Floating scroll mirror for super table -->
+  <!-- ============================================================
+     MANGODESK SETUP WIZARD v3
+     HOW TO ADD THIS TO YOUR FILE:
+     1. Open your index.html in Notepad
+     2. Press Ctrl+End to go to the very bottom
+     3. You will see </body> and </html> at the bottom
+     4. Click just BEFORE </body>
+     5. Open this file in Notepad (File > Open)
+     6. Press Ctrl+A then Ctrl+C to copy everything
+     7. Click back into your index.html and press Ctrl+V to paste
+     8. Save the file (Ctrl+S)
+     ============================================================ -->
+
+<!-- MANGODESK WIZARD OVERLAY -->
+<div id="md-wizard-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:99999;overflow-y:auto;font-family:'DM Sans',sans-serif;">
+  <div style="max-width:600px;margin:40px auto;padding:20px;">
+
+    <!-- Logo / Header -->
+    <div style="text-align:center;margin-bottom:28px;">
+      <div style="font-family:'Great Vibes',cursive;font-size:42px;background:linear-gradient(135deg,#D4AF6A,#C9952A);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">MangoDesk</div>
+      <div style="color:#8a7e72;font-size:12px;letter-spacing:0.15em;text-transform:uppercase;margin-top:4px;">Setup Wizard</div>
+    </div>
+
+    <!-- Progress bar -->
+    <div style="background:#2a2520;border-radius:4px;height:4px;margin-bottom:8px;">
+      <div id="md-wiz-progress" style="height:4px;border-radius:4px;background:linear-gradient(90deg,#C9952A,#D4AF6A);transition:width 0.4s;width:0%;"></div>
+    </div>
+    <div id="md-wiz-step-label" style="color:#8a7e72;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:24px;text-align:right;"></div>
+
+    <!-- Card -->
+    <div style="background:#1a1614;border:1px solid #3a2e22;border-radius:14px;overflow:hidden;">
+      <div id="md-wiz-body" style="padding:36px;"></div>
+
+      <!-- Navigation -->
+      <div style="padding:20px 36px;border-top:1px solid #2a2218;display:flex;justify-content:space-between;align-items:center;background:#151210;">
+        <button id="md-wiz-back" onclick="mdWizChange(-1)" style="background:none;border:1px solid #3a2e22;border-radius:6px;padding:10px 22px;color:#8a7e72;font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;">← Back</button>
+        <div id="md-wiz-dots" style="display:flex;gap:6px;align-items:center;"></div>
+        <button id="md-wiz-next" onclick="mdWizNext()" style="background:linear-gradient(135deg,#C9952A,#D4AF6A);border:none;border-radius:6px;padding:10px 28px;color:#111;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;">Next →</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PULSING HELP BUTTONS (one per tab) -->
+<style>
+@keyframes md-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(201,149,42,0.7); }
+  70%  { box-shadow: 0 0 0 10px rgba(201,149,42,0); }
+  100% { box-shadow: 0 0 0 0 rgba(201,149,42,0); }
+}
+.md-help-btn {
+  position:fixed;
+  bottom:24px;
+  right:24px;
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#C9952A,#D4AF6A);
+  color:#111;
+  font-weight:900;
+  font-size:20px;
+  border:none;
+  cursor:pointer;
+  z-index:9000;
+  animation: md-pulse 2s infinite;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:'DM Sans',sans-serif;
+  transition: transform 0.2s;
+}
+.md-help-btn:hover { transform: scale(1.1); }
+
+.md-help-panel {
+  display:none;
+  position:fixed;
+  bottom:80px;
+  right:24px;
+  width:300px;
+  background:#1a1614;
+  border:1px solid #C9952A;
+  border-radius:12px;
+  padding:20px;
+  z-index:9001;
+  color:#F5ECD7;
+  font-size:13px;
+  line-height:1.7;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+.md-help-panel h4 {
+  color:#D4AF6A;
+  font-family:'Oswald',sans-serif;
+  font-size:15px;
+  font-weight:400;
+  letter-spacing:0.08em;
+  margin:0 0 10px 0;
+  text-transform:uppercase;
+}
+.md-help-panel p { color:#c8b99a; margin:0; }
+.md-help-close {
+  position:absolute;top:10px;right:14px;
+  background:none;border:none;color:#8a7e72;
+  font-size:18px;cursor:pointer;
+}
+
+/* Wizard input styles - light text on dark */
+.md-wiz-input {
+  width:100%;
+  padding:13px 16px;
+  background:#2a2520;
+  border:1px solid #4a3e2e;
+  border-radius:8px;
+  color:#F5ECD7;
+  font-family:'DM Sans',sans-serif;
+  font-size:14px;
+  outline:none;
+  transition:border-color 0.2s;
+  box-sizing:border-box;
+}
+.md-wiz-input:focus { border-color:#C9952A; background:#322c26; }
+.md-wiz-input::placeholder { color:#6a5e52; }
+.md-wiz-select {
+  width:100%;
+  padding:13px 16px;
+  background:#2a2520;
+  border:1px solid #4a3e2e;
+  border-radius:8px;
+  color:#F5ECD7;
+  font-family:'DM Sans',sans-serif;
+  font-size:14px;
+  outline:none;
+  cursor:pointer;
+  box-sizing:border-box;
+  appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23C9952A' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 16px center;
+}
+.md-wiz-select option { background:#2a2520; color:#F5ECD7; }
+.md-wiz-select:focus { border-color:#C9952A; }
+.md-wiz-label {
+  display:block;
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:#8a7e72;
+  margin-bottom:8px;
+  font-family:'Oswald',sans-serif;
+}
+.md-wiz-field { margin-bottom:20px; }
+.md-wiz-hint { font-size:11px; color:#6a5e52; margin-top:6px; line-height:1.5; }
+.md-wiz-h1 { font-family:'Oswald',sans-serif;font-size:24px;font-weight:400;color:#F5ECD7;margin:0 0 8px 0;letter-spacing:0.03em; }
+.md-wiz-sub { font-size:13px;color:#8a7e72;margin-bottom:28px;line-height:1.7; }
+.md-wiz-tab-icon { font-size:32px;margin-bottom:12px; }
+.md-wiz-info-box { background:#211d19;border:1px solid #3a2e22;border-radius:8px;padding:16px;margin-bottom:20px; }
+.md-wiz-info-box p { font-size:13px;color:#c8b99a;line-height:1.7;margin:0; }
+.md-wiz-info-box strong { color:#D4AF6A; }
+
+/* Tour overlay */
+#md-tour-overlay {
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:88888;
+  pointer-events:none;
+}
+.md-tour-spotlight {
+  position:fixed;
+  border:3px solid #C9952A;
+  border-radius:8px;
+  box-shadow:0 0 0 9999px rgba(0,0,0,0.75);
+  transition:all 0.4s;
+  pointer-events:none;
+  z-index:88889;
+}
+.md-tour-tooltip {
+  position:fixed;
+  background:#1a1614;
+  border:1px solid #C9952A;
+  border-radius:10px;
+  padding:16px 20px;
+  max-width:280px;
+  z-index:88890;
+  pointer-events:all;
+  box-shadow:0 8px 32px rgba(0,0,0,0.6);
+}
+.md-tour-tooltip h4 { font-family:'Oswald',sans-serif;font-size:15px;font-weight:400;color:#D4AF6A;margin:0 0 6px 0;letter-spacing:0.08em;text-transform:uppercase; }
+.md-tour-tooltip p { font-size:12px;color:#c8b99a;margin:0 0 14px 0;line-height:1.6; }
+.md-tour-btn { background:linear-gradient(135deg,#C9952A,#D4AF6A);border:none;border-radius:6px;padding:8px 20px;color:#111;font-weight:700;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif; }
+</style>
+
+<!-- Tour elements -->
+<div id="md-tour-overlay">
+  <div id="md-tour-spotlight" class="md-tour-spotlight" style="display:none;"></div>
+  <div id="md-tour-tooltip" class="md-tour-tooltip" style="display:none;">
+    <h4 id="md-tour-title"></h4>
+    <p id="md-tour-desc"></p>
+    <div style="display:flex;gap:8px;">
+      <button class="md-tour-btn" onclick="mdTourNext()">Next →</button>
+      <button onclick="mdTourEnd()" style="background:none;border:1px solid #3a2e22;border-radius:6px;padding:8px 16px;color:#8a7e72;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;">Skip tour</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+
+  // ── WIZARD DATA ──────────────────────────────────────────────
+  var answers = {};
+
+  var steps = [
+
+    // 0 — Welcome
+    function(){ return `
+      <div class="md-wiz-tab-icon">🥭</div>
+      <div class="md-wiz-h1">Welcome to MangoDesk</div>
+      <div class="md-wiz-sub">Your personal financial command centre. This wizard takes about 2 minutes and sets everything up for you — no blank pages, no guessing.</div>
+      <div class="md-wiz-info-box"><p>MangoDesk tracks your <strong>properties, vehicles, insurance, bank accounts, superannuation, shares, cashflow</strong> and <strong>bills</strong> — all in one place. Let's get you set up.</p></div>
+    `; },
+
+    // 1 — Your name
+    function(){ return `
+      <div class="md-wiz-h1">About You</div>
+      <div class="md-wiz-sub">Just a couple of quick details to personalise your dashboard.</div>
+      <div class="md-wiz-field">
+        <label class="md-wiz-label">Your first name</label>
+        <input class="md-wiz-input" id="wiz-name" type="text" placeholder="e.g. Anne" value="${answers.name||''}">
+      </div>
+      <div class="md-wiz-field">
+        <label class="md-wiz-label">Preferred currency</label>
+        <select class="md-wiz-select" id="wiz-currency">
+          <option value="AUD" ${(answers.currency||'AUD')==='AUD'?'selected':''}>AUD — Australian Dollar</option>
+          <option value="USD" ${answers.currency==='USD'?'selected':''}>USD — US Dollar</option>
+          <option value="GBP" ${answers.currency==='GBP'?'selected':''}>GBP — British Pound</option>
+          <option value="NZD" ${answers.currency==='NZD'?'selected':''}>NZD — New Zealand Dollar</option>
+          <option value="EUR" ${answers.currency==='EUR'?'selected':''}>EUR — Euro</option>
+        </select>
+      </div>
+    `; },
+
+    // 2 — Properties
+    function(){ return `
+      <div class="md-wiz-tab-icon">🏠</div>
+      <div class="md-wiz-h1">Properties</div>
+      <div class="md-wiz-info-box"><p>The <strong>Properties tab</strong> lets you track your real estate portfolio — property values, mortgage balances, rental income, expenses and equity over time. Great for seeing your net position at a glance.</p></div>
+      <div class="md-wiz-field">
+        <label class="md-wiz-label">How many properties do you want to track?</label>
+        <select class="md-wiz-select" id="wiz-properties">
+          <option value="0" ${(answers.properties||'0')==='0'?'selected':''}>0 — I don't own any yet</option>
+          <option value="1" ${answers.properties==='1'?'selected':''}>1</option>
+          <option value="2" ${answers.properties==='2'?'selected':''}>2</option>
+          <option value="3" ${answers.properties==='3'?'selected':''}>3</option>
+          <option value="4" ${answers.properties==='4'?'selected':''}>4</option>
+          <option value="5" ${answers.properties==='5'?'selected':''}>5+</option>
+        </select>
+        <div class="md-wiz-hint">We'll create that many empty property cards ready for you to fill in.</div>
+      </div>
+    `; },
+
+    // 3 — Vehicles
+    function(){ return `
+      <div class="md-wiz-tab-icon">🚗</div>
+      <div class="md-wiz-h1">Vehicles</div>
+      <div class="md-wiz-info-box"><p>The <strong>Vehicles tab</strong> tracks your cars, motorbikes, boats or any other vehicles — purchase price, current value, registration, loan balance and running costs. Useful for insurance and depreciation tracking.</p></div>
+      <div class="md-wiz-field">
+        <label class="md-wiz-label">How many vehicles do you want to track?</label>
+        <select class="md-wiz-select" id="wiz-vehicles">
+          <option value="0" ${(answers.vehicles||'0')==='0'?'selected':''}>0 — None right now</option>
+          <option value="1" ${answers.vehicles==='1'?'selected':''}>1</option>
+          <option value="2" ${answers.vehicles==='2'?'selected':''}>2</option>
+          <option value="3" ${answers.vehicles==='3'?'selected':''}>3</option>
+          <option value="4" ${answers.vehicles==='4'?'selected':''}>4+</option>
+        </select>
+        <div class="md-wiz-hint">We'll create that many empty vehicle cards for you.</div>
+      </div>
+    `; },
+
+    // 4 — Insurance
+    function(){ return `
+      <div class="md-wiz-tab-icon">🛡️</div>
+      <div class="md-wiz-h1">Insurance</div>
+      <div class="md-wiz-info-box"><p>The <strong>Insurance tab</strong> keeps all your policies in one place — home, car, life, health, income protection and more. Track premiums, renewal dates and coverage amounts so nothing slips through the cracks.</p></div>
+      <div class="md-wiz-field">
+        <label class="md-wiz-label">How many insurance policies do you have?</label>
+        <select class="md-wiz-select" id="wiz-insurance">
+          <option value="0" ${(answers.insurance||'0')==='0'?'selected':''}>0 — None to track yet</option>
+          <option value="1" ${answers.insurance==='1'?'selected':''}>1</option>
+          <option value="2" ${answers.insurance==='2'?'selected':''}>2</option>
+          <option value="3" ${answers.insurance==='3'?'selected':''}>3</option>
+          <option value="4" ${answers.insurance==='4'?'selected':''}>4</option>
+          <option value="5" ${answers.insurance==='5'?'selected':''}>5+</option>
+        </select>
+        <div class="md-wiz-hint">Each policy gets its own card with renewal reminders.</div>
+      </div>
+    `; },
+
+    // 5 — Bank Accounts
+    function(){ return `
+      <div class="md-wiz-tab-icon">🏦</div>
+      <div class="md-wiz-h1">Bank Accounts</div>
+      <div class="md-wiz-info-box"><p>The <strong>Bank Accounts tab</strong> gives you a snapshot of all your accounts — everyday, savings, offset, term deposits and more. Track balances, interest rates and watch your total cash position at a glance.</p></div>
+      <div class="md-wiz-field">
+        <label class="md-wiz-label">How many bank accounts do you want to track?</label>
+        <select class="md-wiz-select" id="wiz-bank">
+          <option value="0" ${(answers.bank||'0')==='0'?'selected':''}>0 — I'll add them later</option>
+          <option value="1" ${answers.bank==='1'?'selected':''}>1</option>
+          <option value="2" ${answers.bank==='2'?'selected':''}>2</option>
+          <option value="3" ${answers.bank==='3'?'selected':''}>3</option>
+          <option value="4" ${answers.bank==='4'?'selected':''}>4</option>
+          <option value="5" ${answers.bank==='5'?'selected':''}>5+</option>
+        </select>
+      </div>
+    `; },
+
+    // 6 — Super
+    function(){ return `
+      <div class="md-wiz-tab-icon">🌟</div>
+      <div class="md-wiz-h1">Superannuation</div>
+      <div class="md-wiz-info-box"><p>The <strong>Super tab</strong> tracks your superannuation funds — balances, fund names, employer contributions and investment options. If you have multiple funds, you can see your total super balance in one place and track it growing over time.</p></div>
+      <div class="md-wiz-field">
+        <label class="md-wiz-label">How many super accounts do you have?</label>
+        <select class="md-wiz-select" id="wiz-super">
+          <option value="0" ${(answers.super||'0')==='0'?'selected':''}>0 — Not sure / add later</option>
+          <option value="1" ${answers.super==='1'?'selected':''}>1</option>
+          <option value="2" ${answers.super==='2'?'selected':''}>2</option>
+          <option value="3" ${answers.super==='3'?'selected':''}>3+</option>
+        </select>
+        <div class="md-wiz-hint">Most people have 1 or 2. You can always add more later.</div>
+      </div>
+    `; },
+
+    // 7 — Shares
+    function(){ return `
+      <div class="md-wiz-tab-icon">📈</div>
+      <div class="md-wiz-h1">Shares & Investments</div>
+      <div class="md-wiz-info-box"><p>The <strong>Shares tab</strong> tracks your investment portfolio — ASX shares, ETFs, managed funds and other investments. Record purchase price, current value and dividends to see your total investment performance over time.</p></div>
+      <div class="md-wiz-field">
+        <label class="md-wiz-label">Do you have shares or investments to track?</label>
+        <select class="md-wiz-select" id="wiz-shares">
+          <option value="0" ${(answers.shares||'0')==='0'?'selected':''}>0 — Not yet</option>
+          <option value="1" ${answers.shares==='1'?'selected':''}>Yes — a few holdings</option>
+          <option value="2" ${answers.shares==='2'?'selected':''}>Yes — an active portfolio</option>
+        </select>
+      </div>
+    `; },
+
+    // 8 — Cashflow
+    function(){ return `
+      <div class="md-wiz-tab-icon">💵</div>
+      <div class="md-wiz-h1">Cashflow & Income</div>
+      <div class="md-wiz-info-box"><p>The <strong>Cashflow tab</strong> tracks money coming in — salary, rental income, dividends, side income and any other regular payments. It gives you a clear picture of your total monthly and annual income across all sources.</p></div>
+      <div class="md-wiz-field">
+        <label class="md-wiz-label">How many income sources do you want to set up?</label>
+        <select class="md-wiz-select" id="wiz-cashflow">
+          <option value="0" ${(answers.cashflow||'0')==='0'?'selected':''}>0 — I'll fill this in later</option>
+          <option value="1" ${answers.cashflow==='1'?'selected':''}>1 — Just my salary</option>
+          <option value="2" ${answers.cashflow==='2'?'selected':''}>2–3 sources</option>
+          <option value="3" ${answers.cashflow==='3'?'selected':''}>4+ sources</option>
+        </select>
+      </div>
+    `; },
+
+    // 9 — Bills
+    function(){ return `
+      <div class="md-wiz-tab-icon">📋</div>
+      <div class="md-wiz-h1">Bills & Expenses</div>
+      <div class="md-wiz-info-box"><p>The <strong>Bills tab</strong> tracks your recurring expenses — utilities, subscriptions, loan repayments, rates and anything else that comes out regularly. Never get surprised by a bill again — set due dates and get reminders.</p></div>
+      <div class="md-wiz-field">
+        <label class="md-wiz-label">How many recurring bills do you want to set up?</label>
+        <select class="md-wiz-select" id="wiz-bills">
+          <option value="0" ${(answers.bills||'0')==='0'?'selected':''}>0 — I'll add them later</option>
+          <option value="1" ${answers.bills==='1'?'selected':''}>1–3 bills</option>
+          <option value="2" ${answers.bills==='2'?'selected':''}>4–8 bills</option>
+          <option value="3" ${answers.bills==='3'?'selected':''}>9+ bills</option>
+        </select>
+      </div>
+    `; },
+
+    // 10 — All done
+    function(){
+      var name = answers.name ? ', ' + answers.name : '';
+      return `
+      <div style="text-align:center;padding:10px 0;">
+        <div style="font-size:48px;margin-bottom:16px;">🎉</div>
+        <div class="md-wiz-h1">You're all set${name}!</div>
+        <div class="md-wiz-sub">MangoDesk is ready. We've prepared your dashboard based on your answers. Click below to take a quick tour of each tab — or skip straight to your dashboard.</div>
+        <div class="md-wiz-info-box" style="text-align:left;">
+          <p>💡 <strong>Tip:</strong> Look for the pulsing <strong style="color:#C9952A;">gold ? button</strong> on every tab — tap it anytime for a quick explanation of what that tab does and how to use it.</p>
+        </div>
+      </div>
+    `; }
+
+  ];
+
+  var mdWizStep = 0;
+
+  function mdWizSaveStep() {
+    if (document.getElementById('wiz-name')) answers.name = document.getElementById('wiz-name').value;
+    if (document.getElementById('wiz-currency')) answers.currency = document.getElementById('wiz-currency').value;
+    if (document.getElementById('wiz-properties')) answers.properties = document.getElementById('wiz-properties').value;
+    if (document.getElementById('wiz-vehicles')) answers.vehicles = document.getElementById('wiz-vehicles').value;
+    if (document.getElementById('wiz-insurance')) answers.insurance = document.getElementById('wiz-insurance').value;
+    if (document.getElementById('wiz-bank')) answers.bank = document.getElementById('wiz-bank').value;
+    if (document.getElementById('wiz-super')) answers.super = document.getElementById('wiz-super').value;
+    if (document.getElementById('wiz-shares')) answers.shares = document.getElementById('wiz-shares').value;
+    if (document.getElementById('wiz-cashflow')) answers.cashflow = document.getElementById('wiz-cashflow').value;
+    if (document.getElementById('wiz-bills')) answers.bills = document.getElementById('wiz-bills').value;
+  }
+
+  function mdWizRender() {
+    document.getElementById('md-wiz-body').innerHTML = steps[mdWizStep]();
+    var pct = ((mdWizStep + 1) / steps.length * 100).toFixed(0);
+    document.getElementById('md-wiz-progress').style.width = pct + '%';
+    document.getElementById('md-wiz-step-label').textContent = 'Step ' + (mdWizStep + 1) + ' of ' + steps.length;
+    document.getElementById('md-wiz-back').style.display = mdWizStep > 0 ? 'block' : 'none';
+
+    var nextBtn = document.getElementById('md-wiz-next');
+    if (mdWizStep === steps.length - 1) {
+      nextBtn.textContent = '✨ Take the Tour';
+      nextBtn.onclick = function(){ mdWizClose(); mdTourStart(); };
+    } else {
+      nextBtn.textContent = 'Next →';
+      nextBtn.onclick = function(){ mdWizNext(); };
+    }
+
+    var dots = '';
+    for (var i = 0; i < steps.length; i++) {
+      var w = i === mdWizStep ? '24px' : '12px';
+      var bg = i === mdWizStep ? '#C9952A' : i < mdWizStep ? 'rgba(201,149,42,0.45)' : 'rgba(255,255,255,0.15)';
+      dots += '<div style="height:3px;border-radius:2px;width:' + w + ';background:' + bg + ';transition:all 0.3s;"></div>';
+    }
+    document.getElementById('md-wiz-dots').innerHTML = dots;
+    document.getElementById('md-wizard-overlay').scrollTop = 0;
+  }
+
+  window.mdWizNext = function() {
+    mdWizSaveStep();
+    if (mdWizStep < steps.length - 1) {
+      mdWizStep++;
+      mdWizRender();
+    }
+  };
+
+  window.mdWizChange = function(dir) {
+    mdWizSaveStep();
+    mdWizStep = Math.max(0, Math.min(steps.length - 1, mdWizStep + dir));
+    mdWizRender();
+  };
+
+  function mdWizClose() {
+    document.getElementById('md-wizard-overlay').style.display = 'none';
+    document.body.style.overflow = '';
+    try { localStorage.setItem('mangodesk-wizard-done', '1'); } catch(e){}
+  }
+
+  window.openWizard = function() {
+    mdWizStep = 0;
+    document.getElementById('md-wizard-overlay').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    mdWizRender();
+  };
+
+  // Auto-open first visit
+  window.addEventListener('load', function() {
+    try {
+      if (!localStorage.getItem('mangodesk-wizard-done')) {
+        setTimeout(openWizard, 800);
+      }
+    } catch(e) { setTimeout(openWizard, 800); }
+  });
+
+  // ── HELP BUTTONS ─────────────────────────────────────────────
+  var helpContent = {
+    'tab-dashboard':  { title: 'Dashboard',       text: 'Your financial overview — see totals across all areas at a glance. Net worth, assets, liabilities and recent activity all in one place.' },
+    'tab-properties': { title: 'Properties',      text: 'Track your real estate — property values, mortgages, equity, rental income and expenses. Your full property picture in one spot.' },
+    'tab-vehicles':   { title: 'Vehicles',         text: 'Track cars, bikes, boats and other vehicles — current value, loan balance, registration and running costs.' },
+    'tab-insurance':  { title: 'Insurance',        text: 'All your insurance policies in one place — premiums, coverage, renewal dates and provider details. Never miss a renewal.' },
+    'tab-bank':       { title: 'Bank Accounts',    text: 'See all your accounts together — everyday, savings, offset and term deposits. Track balances and total cash position.' },
+    'tab-super':      { title: 'Superannuation',   text: 'Track your super funds — balances, contributions, fund names and investment options. Watch your retirement savings grow.' },
+    'tab-shares':     { title: 'Shares & Investments', text: 'Your investment portfolio — shares, ETFs and managed funds. Track purchase price, current value, dividends and overall performance.' },
+    'tab-cashflow':   { title: 'Cashflow & Income', text: 'All your income sources — salary, rent, dividends and other earnings. See your total monthly and annual income clearly.' },
+    'tab-bills':      { title: 'Bills & Expenses', text: 'Track recurring bills and expenses — utilities, subscriptions, loan repayments and rates. Set due dates and never get caught out.' },
+  };
+
+  var helpOpen = null;
+
+  function mdHelpToggle(tabId) {
+    if (helpOpen === tabId) {
+      document.getElementById('md-help-panel-' + tabId).style.display = 'none';
+      helpOpen = null;
+    } else {
+      if (helpOpen) document.getElementById('md-help-panel-' + helpOpen).style.display = 'none';
+      document.getElementById('md-help-panel-' + tabId).style.display = 'block';
+      helpOpen = tabId;
+    }
+  }
+
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      Object.keys(helpContent).forEach(function(tabId) {
+        var tabEl = document.getElementById(tabId);
+        if (!tabEl) return;
+
+        // Create ? button
+        var btn = document.createElement('button');
+        btn.className = 'md-help-btn';
+        btn.innerHTML = '?';
+        btn.title = 'What is this tab?';
+        btn.onclick = function(e) { e.stopPropagation(); mdHelpToggle(tabId); };
+
+        // Create panel
+        var panel = document.createElement('div');
+        panel.className = 'md-help-panel';
+        panel.id = 'md-help-panel-' + tabId;
+        var h = helpContent[tabId];
+        panel.innerHTML = '<button class="md-help-close" onclick="document.getElementById(\'md-help-panel-' + tabId + '\').style.display=\'none\'">✕</button><h4>' + h.title + '</h4><p>' + h.text + '</p>';
+
+        tabEl.style.position = 'relative';
+        tabEl.appendChild(btn);
+        tabEl.appendChild(panel);
+      });
+    }, 1000);
+  });
+
+  // ── TOUR ─────────────────────────────────────────────────────
+  var tourSteps = [
+    { tab: 'tab-dashboard',  title: 'Dashboard',          desc: 'This is your financial command centre. Every tab feeds into this overview so you can see your complete net worth at a glance.' },
+    { tab: 'tab-properties', title: 'Properties',         desc: 'Click here to manage your properties — values, mortgages, equity and rental income all tracked in one place.' },
+    { tab: 'tab-vehicles',   title: 'Vehicles',            desc: 'Track your cars and other vehicles here — current value, loans and running costs.' },
+    { tab: 'tab-insurance',  title: 'Insurance',           desc: 'All your policies live here — premiums, renewal dates and coverage amounts so nothing gets missed.' },
+    { tab: 'tab-bank',       title: 'Bank Accounts',       desc: 'See all your accounts and total cash balance here — savings, everyday, offset and term deposits.' },
+    { tab: 'tab-super',      title: 'Superannuation',      desc: 'Track your super balance and contributions here. Watch your retirement savings grow over time.' },
+    { tab: 'tab-shares',     title: 'Shares & Investments',desc: 'Your investment portfolio lives here — shares, ETFs and managed funds with full performance tracking.' },
+    { tab: 'tab-cashflow',   title: 'Cashflow & Income',   desc: 'All your income sources in one place — salary, rent, dividends and other earnings.' },
+    { tab: 'tab-bills',      title: 'Bills & Expenses',    desc: 'Track all your recurring bills here — due dates, amounts and reminders so you\'re never caught out.' },
+  ];
+
+  var tourStep = 0;
+
+  window.mdTourStart = function() {
+    tourStep = 0;
+    document.getElementById('md-tour-overlay').style.display = 'block';
+    mdTourShow();
+  };
+
+  window.mdTourNext = function() {
+    tourStep++;
+    if (tourStep >= tourSteps.length) { mdTourEnd(); return; }
+    mdTourShow();
+  };
+
+  window.mdTourEnd = function() {
+    document.getElementById('md-tour-overlay').style.display = 'none';
+    document.getElementById('md-tour-spotlight').style.display = 'none';
+    document.getElementById('md-tour-tooltip').style.display = 'none';
+  };
+
+  function mdTourShow() {
+    var s = tourSteps[tourStep];
+    var el = document.getElementById(s.tab);
+
+    // Try to click the tab button to show it
+    var tabBtn = document.querySelector('[onclick*="' + s.tab.replace('tab-','') + '"]') ||
+                 document.querySelector('[data-tab="' + s.tab + '"]');
+    if (tabBtn) tabBtn.click();
+
+    var spotlight = document.getElementById('md-tour-spotlight');
+    var tooltip   = document.getElementById('md-tour-tooltip');
+
+    if (el) {
+      var r = el.getBoundingClientRect();
+      spotlight.style.display = 'block';
+      spotlight.style.top    = (r.top  - 6) + 'px';
+      spotlight.style.left   = (r.left - 6) + 'px';
+      spotlight.style.width  = (r.width  + 12) + 'px';
+      spotlight.style.height = (r.height + 12) + 'px';
+
+      // Position tooltip below or above
+      var tipTop = r.bottom + 16;
+      if (tipTop + 160 > window.innerHeight) tipTop = r.top - 170;
+      tooltip.style.top  = tipTop + 'px';
+      tooltip.style.left = Math.min(r.left, window.innerWidth - 300) + 'px';
+    }
+
+    document.getElementById('md-tour-title').textContent = s.title;
+    document.getElementById('md-tour-desc').textContent  = s.desc;
+    var btn = tooltip.querySelector('.md-tour-btn');
+    btn.textContent = tourStep === tourSteps.length - 1 ? '✓ Done' : 'Next →';
+    tooltip.style.display = 'block';
+  }
+
+})();
+</script>
+
 <div id="sf-scroll-mirror"><div id="sf-scroll-mirror-inner"></div></div>
 </body>
 </html>
