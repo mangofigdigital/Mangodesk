@@ -4916,8 +4916,17 @@ async function checkSubscription(userId) {
 
 // Check if user has completed setup wizard
 async function checkFirstLogin(userId) {
-  // Skip wizard for now - always return false
-  return false;
+  try {
+    const { data, error } = await db
+      .from('mangodesk_data')
+      .select('id')
+      .eq('user_id', userId)
+      .maybeSingle();
+    if (!data) return true;
+    return false;
+  } catch(e) {
+    return false;
+  }
 }
 
 // Wizard navigation
