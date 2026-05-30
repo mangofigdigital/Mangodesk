@@ -813,8 +813,8 @@ tr[data-close="neg"] td {
 
 <style>
 .mdh-wrap{font-family:sans-serif;margin-bottom:10px;}
-.mdh-header{background:#1e2a3a;border-radius:6px;padding:13px 18px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;transition:background 0.15s;}
-.mdh-header:hover{background:#243347;}
+.mdh-header{background:#000000;border-radius:6px;padding:13px 18px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;transition:background 0.15s;}
+.mdh-header:hover{background:#111111;}
 .mdh-header.mdh-open{border-radius:6px 6px 0 0;}
 .mdh-header-overview{background:#14202e;border:1px solid rgba(201,146,42,0.4);}
 .mdh-header-overview:hover{background:#1a2a3e;}
@@ -823,7 +823,7 @@ tr[data-close="neg"] td {
 .mdh-title{font-size:11px;font-weight:600;color:#fff;letter-spacing:0.1em;text-transform:uppercase;}
 .mdh-sub{font-size:11px;color:rgba(255,255,255,0.38);margin-left:8px;}
 .mdh-arrow{color:rgba(255,255,255,0.45);font-size:12px;transition:transform 0.25s;flex-shrink:0;}
-.mdh-body{background:#f7f6f3;border:1px solid #e0ddd6;border-top:none;border-radius:0 0 6px 6px;padding:20px;}
+.mdh-body{background:#3a3a3a;border:1px solid #222;border-top:none;border-radius:0 0 6px 6px;padding:20px;}
 .mdh-intro{font-size:13px;color:#222;line-height:1.75;margin:0 0 8px;}
 .mdh-note{display:block;background:#fff8ec;border:1px solid #e8c170;border-left:3px solid #c9922a;border-radius:4px;padding:9px 13px;font-size:12px;color:#6b4e10;margin:0 0 18px;line-height:1.6;}
 .mdh-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:10px;}
@@ -1271,7 +1271,7 @@ function mdhOpen(id){
 ══════════════════════════════════════ -->
 <div class="tab-pane" id="tab-properties">
 <div class="mdh-wrap">
-  <div class="mdh-header" id="mdh-h-properties" onclick="mdhtog('properties')">
+  <div class="mdh-header mdh-header-properties" id="mdh-h-properties" onclick="mdhtog('properties')">
     <div class="mdh-left">
       <i class="ti ti-home mdh-icon" aria-hidden="true"></i>
       <span class="mdh-title">Properties</span>
@@ -1452,7 +1452,7 @@ function mdhOpen(id){
 ══════════════════════════════════════ -->
 <div class="tab-pane" id="tab-insurance">
 <div class="mdh-wrap">
-  <div class="mdh-header" id="mdh-h-insurance" onclick="mdhtog('insurance')">
+  <div class="mdh-header mdh-header-insurance" id="mdh-h-insurance" onclick="mdhtog('insurance')">
     <div class="mdh-left">
       <i class="ti ti-shield mdh-icon" aria-hidden="true"></i>
       <span class="mdh-title">Insurance</span>
@@ -1526,7 +1526,7 @@ function mdhOpen(id){
 ══════════════════════════════════════ -->
 <div class="tab-pane" id="tab-super">
 <div class="mdh-wrap">
-  <div class="mdh-header" id="mdh-h-super" onclick="mdhtog('super')">
+  <div class="mdh-header mdh-header-super" id="mdh-h-super" onclick="mdhtog('super')">
     <div class="mdh-left">
       <i class="ti ti-building-bank mdh-icon" aria-hidden="true"></i>
       <span class="mdh-title">Superannuation</span>
@@ -1623,7 +1623,7 @@ function mdhOpen(id){
 ══════════════════════════════════════ -->
 <div class="tab-pane" id="tab-shares">
 <div class="mdh-wrap">
-  <div class="mdh-header" id="mdh-h-shares" onclick="mdhtog('shares')">
+  <div class="mdh-header mdh-header-shares" id="mdh-h-shares" onclick="mdhtog('shares')">
     <div class="mdh-left">
       <i class="ti ti-chart-line mdh-icon" aria-hidden="true"></i>
       <span class="mdh-title">Shares & Other Assets</span>
@@ -1752,7 +1752,7 @@ function mdhOpen(id){
 ══════════════════════════════════════ -->
 <div class="tab-pane" id="tab-cashflow">
 <div class="mdh-wrap">
-  <div class="mdh-header" id="mdh-h-cashflow" onclick="mdhtog('cashflow')">
+  <div class="mdh-header mdh-header-cashflow" id="mdh-h-cashflow" onclick="mdhtog('cashflow')">
     <div class="mdh-left">
       <i class="ti ti-cash mdh-icon" aria-hidden="true"></i>
       <span class="mdh-title">Cashflow</span>
@@ -1939,7 +1939,7 @@ function mdhOpen(id){
 ══════════════════════════════════════ -->
 <div class="tab-pane" id="tab-bills">
 <div class="mdh-wrap">
-  <div class="mdh-header" id="mdh-h-bills" onclick="mdhtog('bills')">
+  <div class="mdh-header mdh-header-bills" id="mdh-h-bills" onclick="mdhtog('bills')">
     <div class="mdh-left">
       <i class="ti ti-file-invoice mdh-icon" aria-hidden="true"></i>
       <span class="mdh-title">Bills</span>
